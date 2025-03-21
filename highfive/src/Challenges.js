@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import cameraIcon from '../assets/camera-icon.png'; // Replace with the actual camera icon path
+//import cameraIcon from '../assets/camera-icon.png'; // Replace with the actual camera icon path
 
 const Container = styled.div`
   background-color: #DDE3E3;
@@ -80,7 +80,6 @@ const Challenges = () => {
     <Container>
       <Content>
         <UploadSection>
-          <CameraIcon src={cameraIcon} alt="Camera Icon" />
           <Text>Upload an image</Text>
         </UploadSection>
         <QuestionsSection>

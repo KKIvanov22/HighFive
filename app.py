@@ -6,6 +6,7 @@ import webbrowser
 import firebase_admin
 from firebase_admin import credentials
 from flask_cors import CORS
+import subprocess
 
 from src_backend.auth_controller import register_handler, login_handler, get_user_handler
 from src_backend.image_controller import upload_image_handler
@@ -36,4 +37,4 @@ def upload_image():
     return upload_image_handler()
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=3000)
