@@ -7,7 +7,7 @@ import firebase_admin
 from firebase_admin import credentials
 from flask_cors import CORS
 
-from src_backend.auth_controller import register_handler, login_handler
+from src_backend.auth_controller import register_handler, login_handler, get_user_handler
 
 
 cred = credentials.Certificate("highfive.json")
@@ -26,6 +26,10 @@ def register():
 @app.route('/login', methods=['POST'])
 def login():
     return login_handler()
+
+@app.route('/get_user', methods=['GET'])
+def get_user():
+    return get_user_handler()
 
 if __name__ == '__main__':
     app.run()

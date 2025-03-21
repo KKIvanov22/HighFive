@@ -44,3 +44,27 @@ def login_handler():
             return jsonify({"error": "User not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 401
+    
+def get_user_handler():
+    print("User endpoint called.")
+    user_id = request.cookies.get('user_id')
+    print(f"user_id from cookies: {user_id}")
+
+    if not user_id:
+        print("User ID not found in cookies.")
+        return jsonify({"error": "User ID not found in cookies"}), 400
+
+    try:
+        ref = db.reference(f'Accounts/{user_id}')
+        user = ref.get()
+
+        if user:
+            print(f"User data for {user_id} fetched successfully.")
+            print(user)        
+            return jsonify(user), 200
+        else:
+            print(f"User {user_id} not found.")
+            return jsonify({"error": "User not found"}), 404
+    except Exception as e:
+        logging.error(f"Error fetching user data: {e}")
+        return jsonify({"error": str(e)}), 500
