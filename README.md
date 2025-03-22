@@ -1,5 +1,4 @@
-<br>
-<br>
+
 <h1 align="center"> 🙏🏻High Five 🙏🏻 </h1>
 <img align="right" src="./highfive/src/figma/logo.png">
 
