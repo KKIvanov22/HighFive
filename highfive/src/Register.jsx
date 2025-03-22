@@ -4,23 +4,72 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 const Container = styled.div`
-  background-color: #DDE3E3;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative; /* Added for logo positioning */
+  background: #CFE1E5; // Changed background color
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 `;
 
-const AuthLinks = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 50%;
+const Logo = styled.img`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 130px;
+`;
+
+const Card = styled.div`
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  width: 350px;
+  text-align: center;
+`;
+
+const Title = styled.h2`
+  color: #2d3436;
   margin-bottom: 20px;
 `;
 
-const AuthLink = styled(Link)`
-  color: #679090;
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  &:focus {
+    border-color: #74b9ff;
+    outline: none;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 10px;
+  background-color: #649D9D;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+  &:hover {
+    background-color: #5A8C8C;
+  }
+`;
+
+const LinkContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const StyledLink = styled(Link)`
+  color: rgb(90, 169, 170);
   text-decoration: none;
   font-weight: bold;
   &:hover {
@@ -28,44 +77,9 @@ const AuthLink = styled(Link)`
   }
 `;
 
-const FormContainer = styled.div`
-  background-color: #CFE1E5;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  text-align: center;
-`;
-
-const Title = styled.h2`
-  color: #679090;
-  margin-bottom: 20px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  background-color: #6E7A7A;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  &::placeholder {
-    color: white;
-  }
-`;
-
-const Button = styled.button`
-  width: 100%;
-  padding: 10px;
-  background-color: #679090;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  &:hover {
-    background-color: #557575;
-  }
+const Message = styled.p`
+  margin-top: 15px;
+  color: #d63031;
 `;
 
 const Register = () => {
@@ -86,11 +100,15 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3005/register', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        'http://localhost:3005/register',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       setMessage(response.data.message);
     } catch (error) {
       setMessage(error.response?.data?.error || 'Registration failed');
@@ -99,18 +117,9 @@ const Register = () => {
 
   return (
     <Container>
-      <AuthLinks>
-        <div>
-          <span>Don't have an account? Make one instantly!</span>
-          <AuthLink to="/register"> REGISTER</AuthLink>
-        </div>
-        <div>
-          <span>Already have an account? Login now!</span>
-          <AuthLink to="/"> LOGIN</AuthLink>
-        </div>
-      </AuthLinks>
-      <FormContainer>
-        <Title>REGISTER</Title>
+      <Logo src="https://media.discordapp.net/attachments/1351242842542178443/1352954923695870023/logo.png?ex=67dfe4f6&is=67de9376&hm=6ea249977282f867eed42b771b13fa796a785f8efb73198d6385c080b43bba8f&=&format=webp&quality=lossless&width=603&height=504" alt="HighFive Logo" style={{ height: '100px' }} />
+      <Card>
+        <Title>Register</Title>
         <form onSubmit={handleSubmit}>
           <Input
             type="email"
@@ -129,7 +138,7 @@ const Register = () => {
           <Input
             type="tel"
             name="phoneNumber"
-            placeholder="Phone"
+            placeholder="Phone Number"
             value={formData.phoneNumber}
             onChange={handleChange}
           />
@@ -142,8 +151,11 @@ const Register = () => {
           />
           <Button type="submit">Register</Button>
         </form>
-        {message && <p>{message}</p>}
-      </FormContainer>
+        {message && <Message>{message}</Message>}
+        <LinkContainer>
+          <StyledLink to="/">Already have an account?</StyledLink>
+        </LinkContainer>
+      </Card>
     </Container>
   );
 };
