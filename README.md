@@ -1,4 +1,4 @@
-
+<br>
 <h1 align="center"> 🙏🏻High Five 🙏🏻 </h1>
 <img align="right" src="./highfive/src/figma/logo.png">
 
@@ -52,7 +52,7 @@
   </tr>
   <tr>
     <td align="center">Stiliyan Dimitrov</td>
-    <td align="center">Data analyst</td>
+    <td align="center">Data Analyst</td>
     <td align="center">🟥 10B</td>
     <td align="center"> <a href="https://github.com/SKDimitrov22">SKDimitrov22 </a></td>
   </tr>
@@ -70,7 +70,7 @@
   </tr>
   <tr>
     <td align="center">Kaloyan Ivanov </td>
-    <td align="center">Backend developer</td>
+    <td align="center">Backend Developer</td>
     <td align="center">🟥 10B</td>
     <td align="center"> <a href="https://github.com/KKIvanov22">KKIvanov22 </a></td>
   </tr>
