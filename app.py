@@ -9,7 +9,7 @@ from flask_cors import CORS
 import subprocess
 
 from src_backend.auth_controller import register_handler, login_handler, get_user_handler
-from src_backend.image_controller import upload_image_handler
+from src_backend.image_controller import upload_image_handler, initialize_models
 
 cred = credentials.Certificate("highfive.json")
 firebase_admin.initialize_app(cred, {
@@ -19,6 +19,8 @@ firebase_admin.initialize_app(cred, {
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 CORS(app)
+
+initialize_models()
 
 @app.route('/register', methods=['POST'])
 def register():

@@ -4,11 +4,69 @@ import { Link } from 'react-router-dom';
 const ChatScreen = () => {
   const [message, setMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
 
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      // Logic to send message would go here
-      setMessage('');
+  const handleSendMessage = async () => {
+    if (message.trim() && selectedImage) {
+      const userMessage = {
+        text: message,
+        isUser: true,
+        id: Date.now()
+      };
+      setChatMessages(prevMessages => [...prevMessages, userMessage]);
+      
+      const formData = new FormData();
+      formData.append('image', selectedImage);
+      formData.append('brand', message.trim());
+
+      try {
+        setChatMessages(prevMessages => [
+          ...prevMessages, 
+          { text: "Processing your request...", isUser: false, id: Date.now() + 1 }
+        ]);
+
+        const response = await fetch('http://localhost:3005/upload_image', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+        
+        setChatMessages(prevMessages => 
+          prevMessages.filter(msg => msg.text !== "Processing your request...")
+        );
+
+        if (response.ok) {
+          const botMessage = {
+            text: `Material: ${result.material} (${result.material_confidence})\n\nEffect: ${result.effect}`,
+            isUser: false,
+            id: Date.now() + 2
+          };
+          setChatMessages(prevMessages => [...prevMessages, botMessage]);
+          
+          setMessage('');
+          setSelectedImage(null);
+        } else {
+          const errorMessage = {
+            text: `Error: ${result.error}`,
+            isUser: false,
+            id: Date.now() + 2
+          };
+          setChatMessages(prevMessages => [...prevMessages, errorMessage]);
+        }
+      } catch (error) {
+        console.error('Error processing request:', error);
+        const errorMessage = {
+          text: "Failed to process your request. Please try again.",
+          isUser: false,
+          id: Date.now() + 2
+        };
+        setChatMessages(prevMessages => [...prevMessages, errorMessage]);
+      }
+    } else if (!selectedImage) {
+      alert('Please select an image first.');
+    } else if (!message.trim()) {
+      alert('Please enter the brand name.');
     }
   };
 
@@ -18,31 +76,8 @@ const ChatScreen = () => {
     }
   };
 
-  const handleImageUpload = async () => {
-    if (!selectedImage) {
-      alert('Please select an image first.');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('image', selectedImage);
-
-    try {
-      const response = await fetch('http://localhost:3005/upload_image', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        alert(`Image uploaded successfully: ${result.filename}`);
-      } else {
-        alert(`Error: ${result.error}`);
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Failed to upload image.');
-    }
+  const handleImageUpload = (e) => {
+    setSelectedImage(e.target.files[0]);
   };
 
   const styles = {
@@ -83,7 +118,8 @@ const ChatScreen = () => {
       marginBottom: '16px',
       padding: '12px',
       borderRadius: '8px',
-      maxWidth: '240px'
+      maxWidth: '70%',
+      whiteSpace: 'pre-wrap'
     },
     userMessage: {
       backgroundColor: '#5aa9a9',
@@ -170,33 +206,9 @@ const ChatScreen = () => {
       color: '#5aa9a9',
       cursor: 'pointer'
     },
-    navbar: {
-      display: 'flex',
-      alignItems: 'center',
-      background: 'linear-gradient(to right, #d1e7e7, #d9e9ea)',
-      padding: '10px 20px',
-      borderBottom: '1px solid #bbd9d9',
-      height: '70px'
-    },
-    logoContainer: {
-      marginRight: '20px'
-    },
-    logo: {
-      height: '60px',
-      width: 'auto',
-      borderRadius: '50%',
-      border: '2px solid #5aa9a9'
-    },
-    navLinks: {
-      display: 'flex',
-      flexGrow: 1,
-      justifyContent: 'center',
-      gap: '60px'
-    },
-    navLink: {
+    imageSelected: {
+      marginTop: '10px',
       color: '#5aa9a9',
-      textDecoration: 'none',
-      fontSize: '24px',
       fontWeight: 'bold'
     }
   };
@@ -207,6 +219,17 @@ const ChatScreen = () => {
         <div style={styles.mainContent}>
           <div style={styles.chatSection}>
             <div style={styles.chatContainer}>
+              {chatMessages.map(msg => (
+                <div 
+                  key={msg.id}
+                  style={{
+                    ...styles.message,
+                    ...(msg.isUser ? styles.userMessage : styles.botMessage)
+                  }}
+                >
+                  {msg.text}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -229,21 +252,25 @@ const ChatScreen = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setSelectedImage(e.target.files[0])}
-                  style={{ marginBottom: '16px', marginLeft: '75px' }} // Added marginLeft to move right
+                  onChange={handleImageUpload}
+                  style={{ marginBottom: '16px', marginLeft: '75px' }}
                 />
-                <button onClick={handleImageUpload} style={styles.sendButton}>
-                  Upload Image
-                </button>
+                {selectedImage && (
+                  <div style={styles.imageSelected}>
+                    Image selected: {selectedImage.name}
+                  </div>
+                )}
               </div>
             </div>
 
             <div style={styles.challengesBox}>
               <div style={styles.challengeItem}>
                 <h2 style={styles.challengeTitle}>1. Which type of material was used?</h2>
+                <p>Upload an image to identify the material</p>
               </div>
               <div style={styles.challengeItem}>
                 <h2 style={styles.challengeTitle}>2. Which company produced the clothing?</h2>
+                <p>Type the brand name in the message box</p>
               </div>
               <div style={styles.buttonContainer}>
               </div>
@@ -258,7 +285,7 @@ const ChatScreen = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Send message"
+              placeholder="Enter the brand name"
               style={styles.input}
             />
             <button 
