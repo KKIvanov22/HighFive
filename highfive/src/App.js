@@ -1,237 +1,298 @@
-import React, { useState } from 'react';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import axios from 'axios'; 
-import Register from './Register';
-import Challenges from './Challenges';
-import BulgariaMap from './map';
-import ChatScreen from './chat';
+import React, { useState, useEffect, useRef } from "react";
+import ReactPlayer from 'react-player';
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import video from "./3.mp4";
+import "./App.css"; // Ensure App.css is imported for map styles
 
-const Container = styled.div`
-  background-color: rgb(255, 255, 255);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; /* Center content vertically */
-  min-height: 100vh;
-`;
+// Define the marker icon for the map
+const markerIcon = new L.Icon({
+  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+  iconSize: [30, 45],
+  iconAnchor: [15, 45],
+  popupAnchor: [1, -40],
+});
 
-const TopBar = styled.div`
-  width: 100%;
-  height: 50px; /* Adjust height as needed */
-  background-color: #679090; /* Example background color */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-weight: bold;
-`;
+const tileLayerUrl = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
 
-const AuthLinks = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 50%;
-  margin-bottom: 20px;
-  color: #679090;
-  text-decoration: none;
-`;
+// List of second-hand stores
+const secondHandStores = [
+  { id: 1, name: "Second Hand Sofia", city: "Sofia", position: [42.6977, 23.3242] },
+  { id: 2, name: "Thrift Store Plovdiv", city: "Plovdiv", position: [42.1354, 24.7453] },
+  { id: 3, name: "Vintage Varna", city: "Varna", position: [43.2141, 27.9147] },
+  { id: 4, name: "Eco Clothes Burgas", city: "Burgas", position: [42.5048, 27.4626] },
+  { id: 5, name: "Retro Fashion Ruse", city: "Ruse", position: [43.8356, 25.9657] },
+  { id: 6, name: "Thrift Haven Stara Zagora", city: "Stara Zagora", position: [42.4255, 25.6350] },
+  { id: 7, name: "Vintage Love Blagoevgrad", city: "Blagoevgrad", position: [42.0200, 23.1073] },
+  { id: 8, name: "Eco Thrift Pleven", city: "Pleven", position: [43.4173, 24.6163] },
+  { id: 9, name: "Second Chance Vidin", city: "Vidin", position: [43.9893, 22.8769] },
+  { id: 10, name: "Thrift Treasure Gabrovo", city: "Gabrovo", position: [42.8693, 25.3372] },
+  { id: 11, name: "Retro Finds Veliko Tarnovo", city: "Veliko Tarnovo", position: [43.0732, 25.6174] },
+  { id: 12, name: "Vintage Finds Lovech", city: "Lovech", position: [43.1329, 24.7263] },
+  { id: 13, name: "Sustainable Wardrobe Targovishte", city: "Targovishte", position: [43.2612, 26.6106] },
+  { id: 14, name: "Thrift Style Haskovo", city: "Haskovo", position: [41.9373, 25.5564] },
+  { id: 15, name: "Vintage Boulevard Yambol", city: "Yambol", position: [42.4869, 26.5015] },
+  { id: 16, name: "Eco Trends Montana", city: "Montana", position: [43.4073, 23.2257] },
+  { id: 17, name: "Retro Clothing Kyustendil", city: "Kyustendil", position: [42.2862, 22.6910] },
+  { id: 18, name: "Thrift Charm Silistra", city: "Silistra", position: [44.1174, 27.2606] },
+  { id: 19, name: "Vintage Wave Pernik", city: "Pernik", position: [42.5953, 23.0350] },
+  { id: 20, name: "Second Hand Dreams Razgrad", city: "Razgrad", position: [43.5333, 26.5167] },
+  { id: 21, name: "Classic Finds Sliven", city: "Sliven", position: [42.6819, 26.1814] },
+  { id: 22, name: "Vintage Paradise Dobrich", city: "Dobrich", position: [43.5667, 27.8333] },
+  { id: 23, name: "Thrift Style Pazardzhik", city: "Pazardzhik", position: [42.2044, 24.3431] },
+  { id: 24, name: "Eco Chic Sofia", city: "Sofia", position: [42.7028, 23.3238] },
+  { id: 25, name: "Retro Vibes Blagoevgrad", city: "Blagoevgrad", position: [42.0145, 23.1033] },
+  { id: 26, name: "Thrift Stop Veliko Tarnovo", city: "Veliko Tarnovo", position: [43.0866, 25.6120] },
+  { id: 27, name: "Vintage Trends Razgrad", city: "Razgrad", position: [43.5333, 26.5167] },
+  { id: 28, name: "Sustainable Fashion Haskovo", city: "Haskovo", position: [41.9322, 25.5529] },
+  { id: 29, name: "Eco Finds Pleven", city: "Pleven", position: [43.4187, 24.6173] },
+  { id: 30, name: "Retro Styles Ruse", city: "Ruse", position: [43.8404, 25.9658] },
+  { id: 31, name: "Second Hand Discovery Sofia", city: "Sofia", position: [42.6907, 23.3183] },
+  { id: 32, name: "Vintage Vault Varna", city: "Varna", position: [43.2121, 27.9142] },
+  { id: 33, name: "Classic Clothing Burgas", city: "Burgas", position: [42.5027, 27.4662] },
+  { id: 34, name: "Eco Couture Stara Zagora", city: "Stara Zagora", position: [42.4280, 25.6357] },
+  { id: 35, name: "Thrift Revolution Blagoevgrad", city: "Blagoevgrad", position: [42.0234, 23.1030] },
+];
 
-const AuthLink = styled(Link)`
-  color: #679090;
-  text-decoration: none;
-  font-weight: bold;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
+// Function to generate Street View URL
+const generateStreetViewUrl = (lat, lng) => {
+  return `https://www.google.com/maps/embed/v1/streetview?key=YOUR_GOOGLE_MAPS_API_KEY&location=${lat},${lng}&heading=210&pitch=10&fov=35`;
+};
 
-const FormContainer = styled.div`
-  background-color: #CFE1E5;
-  padding: 40px; /* Increase padding to expand the background */
-  border-radius: 8px;
-  width: 400px; /* Expand the background width */
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// BulgariaMap Component
+const BulgariaMap = () => {
+  const [search, setSearch] = useState("");
+  const [filterCity, setFilterCity] = useState("");
+  const mapRef = useRef(null);
 
-const FormContent = styled.div`
-  width: 300px; /* Keep the form itself the same size */
-`;
+  const filteredStores = secondHandStores.filter(
+    (store) =>
+      store.name.toLowerCase().includes(search.toLowerCase()) &&
+      (filterCity === "" || store.city === filterCity)
+  );
 
-const Title = styled.h2`
-  color: #679090;
-  margin-bottom: 20px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  background-color: #6E7A7A;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  &::placeholder {
-    color: white;
-  }
-`;
-
-const Button = styled.button`
-  width: 100%;
-  padding: 15px; /* Increased padding */
-  background-color: #679090;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 18px; /* Increased font size */
-  cursor: pointer;
-  margin-left: 9px;
-  &:hover {
-    background-color: #557575;
-  }
-`;
-
-const Header = styled.header`
-  
-  width: 100%;
-  height: 150px; /* Increased height to accommodate the new div */
-  background-color: #cfe1e5;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  justify-content: center;
-  align-items: center;
-  padding: 0 20px;
-  box-sizing: border-box;
-`;
-
-const HeaderTop = styled.div`
-  width: 100%;
-  background-color: #679090; /* Example background color */
-  color: white;
-  text-align: center;
-  padding: 10px 0;
-  font-weight: bold;
-`;
-
-const HeaderContent = styled.div`
-  width: 90%; /* Adjust width as needed */
-  display: flex;
-  justify-content: space-between;
-  font-size: 20px;
-`;
-
-const HeaderText = styled.div`
-  text-align: center;
-`;
-
-const HeaderSpan = styled.span`
-  display: block;
-  color: #4a4a4a;
-  font-weight: 500;
-  margin-bottom: 5px;
-`;
-
-const HeaderLink = styled(AuthLink)`
-  color: #  color: #679090;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 42px;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const App = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-
-    try {
-      const response = await axios.post('http://localhost:3005/login', {
-        email,
-        password,
-      });
-
-      alert('Login successful!');
-      navigate('/chat'); 
-    } catch (err) {
-      if (err.response && err.response.data) {
-        setError(err.response.data.error || 'Login failed');
-      } else {
-        setError('An error occurred. Please try again.');
-      }
+  useEffect(() => {
+    if (mapRef.current && filteredStores.length > 0) {
+      const bounds = L.latLngBounds(filteredStores.map((store) => store.position));
+      mapRef.current.fitBounds(bounds, { padding: [50, 50] });
     }
-  };
+  }, [filteredStores]);
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Container>
-            <Header>
-              <HeaderContent>
-                <img src="https://media.discordapp.net/attachments/1351242842542178443/1352954923695870023/logo.png?ex=67dfe4f6&is=67de9376&hm=6ea249977282f867eed42b771b13fa796a785f8efb73198d6385c080b43bba8f&=&format=webp&quality=lossless&width=603&height=504" alt="HighFive Logo" style={{ height: '100px' }} />                  
-                <HeaderText>
-                  <HeaderSpan>Don't have an account? Make one instantly!</HeaderSpan>
-                  <HeaderLink to="/register">REGISTER</HeaderLink>
-                </HeaderText>
-                <HeaderText>
-                  <HeaderSpan>Already have an account? Login now!</HeaderSpan>
-                  <HeaderLink to="/">LOGIN</HeaderLink>
-                </HeaderText>
-              </HeaderContent>
-            </Header>
-            <FormContainer>
-              <FormContent>
-                <Title>LOGIN</Title>
-                <form onSubmit={handleLogin}>
-                  <div style={{ marginBottom: '15px', textAlign: 'left' }}>
-                    <label htmlFor="email" style={{ color: '#92A0A2', fontWeight: 'bold' }}>Email</label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div style={{ marginBottom: '15px', textAlign: 'left' }}>
-                    <label htmlFor="password" style={{ color: '#92A0A2', fontWeight: 'bold' }}>Password</label>
-                    <Input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                  {error && <p style={{ color: 'red' }}>{error}</p>}
-                  <div style={{ textAlign: 'center' }}>
-                    <Button type="submit">submit</Button>
-                  </div>
-                </form>
-              </FormContent>
-            </FormContainer>
-          </Container>
-        }
-      />
-      <Route path="/register" element={<Register />} />
-      <Route path="/challenges" element={<Challenges />} />
-      <Route path="/map" element={<BulgariaMap />} />
-      <Route path="/chat" element={<ChatScreen />} />
-    </Routes>
+    <div className="map-container">
+      <div className="controls">
+        <input
+          type="text"
+          placeholder="Search store..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="search-bar"
+        />
+        <select onChange={(e) => setFilterCity(e.target.value)} className="city-select">
+          <option value="">All Cities</option>
+          {[...new Set(secondHandStores.map((store) => store.city))].map((city) => (
+            <option key={city} value={city}>{city}</option>
+          ))}
+        </select>
+      </div>
+
+      <MapContainer
+        center={[42.7339, 25.4858]} // Adjusted to center on Bulgaria
+        zoom={7}
+        style={{ height: "400px", width: "100%", border: "1px solid #ccc", borderRadius: "8px" }}
+        scrollWheelZoom={true}
+        ref={mapRef}
+      >
+        <TileLayer url={tileLayerUrl} />
+        {filteredStores.map((store) => (
+          <Marker key={store.id} position={store.position} icon={markerIcon}>
+            <Popup>
+              <div className="popup-content">
+                <h3>{store.name}</h3>
+                <p>{store.city}</p>
+                <iframe
+                  width="300"
+                  height="200"
+                  src={generateStreetViewUrl(store.position[0], store.position[1])}
+                  frameBorder="0"
+                  style={{ border: "none", borderRadius: "8px" }}
+                  allowFullScreen
+                  title={store.name}
+                ></iframe>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
   );
+};
+
+const App = () => {
+  return (
+    <div style={styles.container}>
+      {/* Navigation Bar */}
+      <div style={styles.navBar}>
+        <div style={styles.logo}>
+          {/* Placeholder for the logo - you can replace this with an actual image */}
+          <div style={styles.logoPlaceholder}>🌍</div>
+        </div>
+        <div style={styles.navLinks}>
+          <a href="#" style={styles.navLink}>HOME</a>
+          <a href="#" style={styles.navLink}>CHAT</a>
+          <a href="#" style={styles.navLink}>CHALLENGES</a>
+        </div>
+      </div>
+
+      {/* Tagline */}
+      <div style={styles.tagline}>
+        Secondhand, First Choice - Look Good, Feel Good, Do Good.
+      </div>
+
+      {/* Video Section */}
+      <div style={styles.videoSection}>
+        <ReactPlayer
+          url={video}
+          playing={true}
+          loop={true}
+          muted={true}
+          width="60%"
+          height="auto"
+          style={{
+            maxWidth: '600px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+            margin: '0 auto', // Center the video
+          }}
+        />
+      </div>
+
+      {/* Materials Section */}
+      <div style={styles.materialsSection}>
+        <h2 style={styles.sectionTitle}>
+          Here are some of the most damaging materials in terms of water pollution and consumption:
+        </h2>
+        <div style={styles.materialsContainer}>
+          {/* Cotton Card */}
+          <div style={styles.materialCard}>
+            <h3 style={styles.materialTitle}>Cotton:</h3>
+            <p style={styles.materialText}>
+              2,700 liters of water for one t-shirt, plus heavy pesticide use.
+            </p>
+          </div>
+
+          {/* Polyester & Nylon Card */}
+          <div style={styles.materialCard}>
+            <h3 style={styles.materialTitle}>Polyester & Nylon:</h3>
+            <p style={styles.materialText}>
+              Shed microplastics into oceans during washing.
+            </p>
+          </div>
+
+          {/* Viscose/Rayon Card */}
+          <div style={styles.materialCard}>
+            <h3 style={styles.materialTitle}>Viscose/Rayon:</h3>
+            <p style={styles.materialText}>
+              Requires toxic chemicals that pollute water.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Call to Action */}
+      <div style={styles.callToAction}>
+        By shopping secondhand, you reduce water waste and environmental harm. Start making a difference! Find the nearest secondhand shop below:
+      </div>
+
+      {/* Map Section */}
+      <BulgariaMap />
+    </div>
+  );
+};
+
+// Inline CSS styles
+const styles = {
+  container: {
+    fontFamily: 'Arial, sans-serif',
+    textAlign: 'center',
+    color: '#333',
+    padding: '0',
+    margin: '0',
+    minHeight: '100vh',
+    backgroundColor: '#fff',
+  },
+  navBar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#e6f0fa',
+    padding: '10px 20px',
+    borderBottom: '2px solid #ccc',
+  },
+  logo: {
+    flex: '1',
+  },
+  logoPlaceholder: {
+    fontSize: '24px',
+  },
+  navLinks: {
+    flex: '2',
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
+  navLink: {
+    textDecoration: 'none',
+    color: '#333',
+    fontWeight: 'bold',
+    fontSize: '16px',
+  },
+  tagline: {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    margin: '40px 0',
+    color: '#555',
+  },
+  videoSection: {
+    margin: '40px 0',
+  },
+  materialsSection: {
+    margin: '40px 0',
+  },
+  sectionTitle: {
+    fontSize: '20px',
+    fontWeight: 'normal',
+    marginBottom: '30px',
+    color: '#555',
+  },
+  materialsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '20px',
+    flexWrap: 'wrap',
+  },
+  materialCard: {
+    backgroundColor: '#b3d4d4',
+    padding: '20px',
+    width: '200px',
+    borderRadius: '8px',
+    textAlign: 'left',
+  },
+  materialTitle: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    marginBottom: '10px',
+    color: '#333',
+  },
+  materialText: {
+    fontSize: '14px',
+    color: '#333',
+  },
+  callToAction: {
+    fontSize: '16px',
+    margin: '40px 0',
+    color: '#555',
+  },
 };
 
 export default App;
