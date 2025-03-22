@@ -6,6 +6,7 @@ def register_handler():
     data = request.get_json()
     username = data.get("username")
     password = data.get("password")
+    phoneNumber = data.get("phoneNumber")
     email = data.get("email")
     
     if not username or not password or not email:

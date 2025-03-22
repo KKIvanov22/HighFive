@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Container = styled.div`
   background-color: #DDE3E3;
@@ -53,7 +54,49 @@ const Input = styled.input`
   }
 `;
 
+const Button = styled.button`
+  width: 100%;
+  padding: 10px;
+  background-color: #679090;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    background-color: #557575;
+  }
+`;
+
 const Register = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    username: '',
+    phoneNumber: '',
+    password: '',
+  });
+
+  const [message, setMessage] = useState('');
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3005/register', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setMessage(response.data.message);
+    } catch (error) {
+      setMessage(error.response?.data?.error || 'Registration failed');
+    }
+  };
+
   return (
     <Container>
       <AuthLinks>
@@ -68,12 +111,38 @@ const Register = () => {
       </AuthLinks>
       <FormContainer>
         <Title>REGISTER</Title>
-        <Input type="email" placeholder="Email" />
-        <Input type="text" placeholder="First Name" />
-        <Input type="text" placeholder="Last Name" />
-        <Input type="tel" placeholder="Phone" />
-        <Input type="text" placeholder="Region" />
-        <Input type="password" placeholder="Password" />
+        <form onSubmit={handleSubmit}>
+          <Input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <Input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+          <Input
+            type="tel"
+            name="phoneNumber"
+            placeholder="Phone"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+          />
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          <Button type="submit">Register</Button>
+        </form>
+        {message && <p>{message}</p>}
       </FormContainer>
     </Container>
   );
