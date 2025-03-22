@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios'; 
 import Register from './Register';
 import Challenges from './Challenges';
 import BulgariaMap from './map';
+import ChatScreen from './chat';
 
 const Container = styled.div`
   background-color: rgb(255, 255, 255);
@@ -79,13 +80,14 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  width: 100%;a
-  padding: 10px;
+  width: 100%;
+  padding: 15px; /* Increased padding */
   background-color: #679090;
   color: white;
   border: none;
   border-radius: 4px;
   font-weight: bold;
+  font-size: 18px; /* Increased font size */
   cursor: pointer;
   margin-left: 9px;
   &:hover {
@@ -150,6 +152,7 @@ const App = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -162,6 +165,7 @@ const App = () => {
       });
 
       alert('Login successful!');
+      navigate('/chat'); 
     } catch (err) {
       if (err.response && err.response.data) {
         setError(err.response.data.error || 'Login failed');
@@ -172,64 +176,61 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Container>
-              
-              <Header>
-               
-                <HeaderContent>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Container>
+            <Header>
+              <HeaderContent>
                 <img src="https://media.discordapp.net/attachments/1351242842542178443/1352954923695870023/logo.png?ex=67dfe4f6&is=67de9376&hm=6ea249977282f867eed42b771b13fa796a785f8efb73198d6385c080b43bba8f&=&format=webp&quality=lossless&width=603&height=504" alt="HighFive Logo" style={{ height: '100px' }} />                  
-                  <HeaderText>
-                    <HeaderSpan>Don't have an account? Make one instantly!</HeaderSpan>
-                    <HeaderLink to="/register">REGISTER</HeaderLink>
-                  </HeaderText>
-                  <HeaderText>
-                    <HeaderSpan>Already have an account? Login now!</HeaderSpan>
-                    <HeaderLink to="/">LOGIN</HeaderLink>
-                  </HeaderText>
-                </HeaderContent>
-              </Header>
-              <FormContainer>
-                <FormContent>
-                  <Title>LOGIN</Title>
-                  <form onSubmit={handleLogin}>
-                    <div style={{ marginBottom: '15px', textAlign: 'left' }}>
-                      <label htmlFor="email" style={{ color: '#92A0A2', fontWeight: 'bold' }}>Email</label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                    <div style={{ marginBottom: '15px', textAlign: 'left' }}>
-                      <label htmlFor="password" style={{ color: '#92A0A2', fontWeight: 'bold' }}>Password</label>
-                      <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    <div style={{ textAlign: 'center' }}>
-                      <Button type="submit">submit</Button>
-                    </div>
-                  </form>
-                </FormContent>
-              </FormContainer>
-            </Container>
-          }
-        />
-        <Route path="/register" element={<Register />} />
-        <Route path="/challenges" element={<Challenges />} />
-        <Route path="/map" element={<BulgariaMap />} />
-      </Routes>
-    </Router>
+                <HeaderText>
+                  <HeaderSpan>Don't have an account? Make one instantly!</HeaderSpan>
+                  <HeaderLink to="/register">REGISTER</HeaderLink>
+                </HeaderText>
+                <HeaderText>
+                  <HeaderSpan>Already have an account? Login now!</HeaderSpan>
+                  <HeaderLink to="/">LOGIN</HeaderLink>
+                </HeaderText>
+              </HeaderContent>
+            </Header>
+            <FormContainer>
+              <FormContent>
+                <Title>LOGIN</Title>
+                <form onSubmit={handleLogin}>
+                  <div style={{ marginBottom: '15px', textAlign: 'left' }}>
+                    <label htmlFor="email" style={{ color: '#92A0A2', fontWeight: 'bold' }}>Email</label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div style={{ marginBottom: '15px', textAlign: 'left' }}>
+                    <label htmlFor="password" style={{ color: '#92A0A2', fontWeight: 'bold' }}>Password</label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  {error && <p style={{ color: 'red' }}>{error}</p>}
+                  <div style={{ textAlign: 'center' }}>
+                    <Button type="submit">submit</Button>
+                  </div>
+                </form>
+              </FormContent>
+            </FormContainer>
+          </Container>
+        }
+      />
+      <Route path="/register" element={<Register />} />
+      <Route path="/challenges" element={<Challenges />} />
+      <Route path="/map" element={<BulgariaMap />} />
+      <Route path="/chat" element={<ChatScreen />} />
+    </Routes>
   );
 };
 
