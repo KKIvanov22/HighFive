@@ -5,6 +5,9 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import video from "./3.mp4";
 import "./App.css"; // Ensure App.css is imported for map styles
+import { Routes, Route, Link } from 'react-router-dom';
+import Challenges from './Challenges'; // Import the Challenges component
+import Chat from './chat'; // Import the Chat component
 
 // Define the marker icon for the map
 const markerIcon = new L.Icon({
@@ -55,7 +58,6 @@ const secondHandStores = [
   { id: 35, name: "Thrift Revolution Blagoevgrad", city: "Blagoevgrad", position: [42.0234, 23.1030] },
 ];
 
-// Function to generate Street View URL
 const generateStreetViewUrl = (lat, lng) => {
   return `https://www.google.com/maps/embed/v1/streetview?key=YOUR_GOOGLE_MAPS_API_KEY&location=${lat},${lng}&heading=210&pitch=10&fov=35`;
 };
@@ -139,74 +141,82 @@ const App = () => {
           <div style={styles.logoPlaceholder}>🌍</div>
         </div>
         <div style={styles.navLinks}>
-          <a href="#" style={styles.navLink}>HOME</a>
-          <a href="#" style={styles.navLink}>CHAT</a>
-          <a href="#" style={styles.navLink}>CHALLENGES</a>
+          <Link to="/" style={styles.navLink}>HOME</Link>
+          <Link to="/chat" style={styles.navLink}>CHAT</Link>
+          <Link to="/challenges" style={styles.navLink}>CHALLENGES</Link>
         </div>
       </div>
 
-      {/* Tagline */}
-      <div style={styles.tagline}>
-        Secondhand, First Choice - Look Good, Feel Good, Do Good.
-      </div>
+      <Routes>
+        <Route path="/" element={
+          <>
+            {/* Tagline */}
+            <div style={styles.tagline}>
+              Secondhand, First Choice - Look Good, Feel Good, Do Good.
+            </div>
 
-      {/* Video Section */}
-      <div style={styles.videoSection}>
-        <ReactPlayer
-          url={video}
-          playing={true}
-          loop={true}
-          muted={true}
-          width="60%"
-          height="auto"
-          style={{
-            maxWidth: '600px',
-            borderRadius: '8px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-            margin: '0 auto', // Center the video
-          }}
-        />
-      </div>
+            {/* Video Section */}
+            <div style={styles.videoSection}>
+              <ReactPlayer
+                url={video}
+                playing={true}
+                loop={true}
+                muted={true}
+                width="60%"
+                height="auto"
+                style={{
+                  maxWidth: '600px',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  margin: '0 auto', // Center the video
+                }}
+              />
+            </div>
 
-      {/* Materials Section */}
-      <div style={styles.materialsSection}>
-        <h2 style={styles.sectionTitle}>
-          Here are some of the most damaging materials in terms of water pollution and consumption:
-        </h2>
-        <div style={styles.materialsContainer}>
-          {/* Cotton Card */}
-          <div style={styles.materialCard}>
-            <h3 style={styles.materialTitle}>Cotton:</h3>
-            <p style={styles.materialText}>
-              2,700 liters of water for one t-shirt, plus heavy pesticide use.
-            </p>
-          </div>
+            {/* Materials Section */}
+            <div style={styles.materialsSection}>
+              <h2 style={styles.sectionTitle}>
+                Here are some of the most damaging materials in terms of water pollution and consumption:
+              </h2>
+              <div style={styles.materialsContainer}>
+                {/* Cotton Card */}
+                <div style={styles.materialCard}>
+                  <h3 style={styles.materialTitle}>Cotton:</h3>
+                  <p style={styles.materialText}>
+                    2,700 liters of water for one t-shirt, plus heavy pesticide use.
+                  </p>
+                </div>
 
-          {/* Polyester & Nylon Card */}
-          <div style={styles.materialCard}>
-            <h3 style={styles.materialTitle}>Polyester & Nylon:</h3>
-            <p style={styles.materialText}>
-              Shed microplastics into oceans during washing.
-            </p>
-          </div>
+                {/* Polyester & Nylon Card */}
+                <div style={styles.materialCard}>
+                  <h3 style={styles.materialTitle}>Polyester & Nylon:</h3>
+                  <p style={styles.materialText}>
+                    Shed microplastics into oceans during washing.
+                  </p>
+                </div>
 
-          {/* Viscose/Rayon Card */}
-          <div style={styles.materialCard}>
-            <h3 style={styles.materialTitle}>Viscose/Rayon:</h3>
-            <p style={styles.materialText}>
-              Requires toxic chemicals that pollute water.
-            </p>
-          </div>
-        </div>
-      </div>
+                {/* Viscose/Rayon Card */}
+                <div style={styles.materialCard}>
+                  <h3 style={styles.materialTitle}>Viscose/Rayon:</h3>
+                  <p style={styles.materialText}>
+                    Requires toxic chemicals that pollute water.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-      {/* Call to Action */}
-      <div style={styles.callToAction}>
-        By shopping secondhand, you reduce water waste and environmental harm. Start making a difference! Find the nearest secondhand shop below:
-      </div>
+            {/* Call to Action */}
+            <div style={styles.callToAction}>
+              By shopping secondhand, you reduce water waste and environmental harm. Start making a difference! Find the nearest secondhand shop below:
+            </div>
 
-      {/* Map Section */}
-      <BulgariaMap />
+            {/* Map Section */}
+            <BulgariaMap />
+          </>
+        } />
+        <Route path="/challenges" element={<Challenges />} />
+        <Route path="/chat" element={<Chat />} />
+      </Routes>
     </div>
   );
 };
