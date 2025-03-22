@@ -109,8 +109,11 @@ const ChatScreen = () => {
     uploadArea: {
       border: '2px dashed #aaa',
       borderRadius: '4px',
-      padding: '24px',
-      marginBottom: '16px'
+      padding: '40px 24px 24px 30px',
+      marginBottom: '16px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
     cameraIcon: {
       width: '80px',
@@ -141,7 +144,6 @@ const ChatScreen = () => {
       display: 'flex',
       justifyContent: 'flex-end'
     },
-    
     inputContainer: {
       padding: '16px',
       backgroundColor: '#e6e6e6',
@@ -169,70 +171,66 @@ const ChatScreen = () => {
       cursor: 'pointer'
     },
     navbar: {
-        display: 'flex',
-        alignItems: 'center',
-        background: 'linear-gradient(to right, #d1e7e7, #d9e9ea)',
-        padding: '10px 20px',
-        borderBottom: '1px solid #bbd9d9',
-        height: '70px'
-      },
-      logoContainer: {
-        marginRight: '20px'
-      },
-      logo: {
-        height: '60px',
-        width: 'auto',
-        borderRadius: '50%',
-        border: '2px solid #5aa9a9'
-      },
-      navLinks: {
-        display: 'flex',
-        flexGrow: 1,
-        justifyContent: 'center',
-        gap: '60px'
-      },
-      navLink: {
-        color: '#5aa9a9',
-        textDecoration: 'none',
-        fontSize: '24px',
-        fontWeight: 'bold'
-      }
+      display: 'flex',
+      alignItems: 'center',
+      background: 'linear-gradient(to right, #d1e7e7, #d9e9ea)',
+      padding: '10px 20px',
+      borderBottom: '1px solid #bbd9d9',
+      height: '70px'
+    },
+    logoContainer: {
+      marginRight: '20px'
+    },
+    logo: {
+      height: '60px',
+      width: 'auto',
+      borderRadius: '50%',
+      border: '2px solid #5aa9a9'
+    },
+    navLinks: {
+      display: 'flex',
+      flexGrow: 1,
+      justifyContent: 'center',
+      gap: '60px'
+    },
+    navLink: {
+      color: '#5aa9a9',
+      textDecoration: 'none',
+      fontSize: '24px',
+      fontWeight: 'bold'
+    }
   };
 
   return (
-    
     <div>
       <div style={styles.container}>
-        
-
         <div style={styles.mainContent}>
           <div style={styles.chatSection}>
             <div style={styles.chatContainer}>
-              
             </div>
           </div>
 
           <div style={styles.sideSection}>
             <div style={styles.uploadBox}>
               <div style={styles.uploadArea}>
-              <svg 
-                style={styles.cameraIcon}
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              >
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                <circle cx="12" cy="13" r="4"></circle>
-              </svg>
+                <svg 
+                  style={styles.cameraIcon}
+                  xmlns="http://www.w3.org/2000/svg" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                >
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="13" r="4"></circle>
+                </svg>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => setSelectedImage(e.target.files[0])}
-                  style={{ marginBottom: '16px' }}
+                  style={{ marginBottom: '16px', marginLeft: '75px' }} // Added marginLeft to move right
                 />
                 <button onClick={handleImageUpload} style={styles.sendButton}>
                   Upload Image
@@ -248,7 +246,6 @@ const ChatScreen = () => {
                 <h2 style={styles.challengeTitle}>2. Which company produced the clothing?</h2>
               </div>
               <div style={styles.buttonContainer}>
-                
               </div>
             </div>
           </div>

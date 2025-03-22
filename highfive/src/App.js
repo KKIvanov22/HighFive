@@ -4,15 +4,14 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import video from "./3.mp4";
-import "./App.css"; // Ensure App.css is imported for map styles
+import "./App.css";
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import Challenges from './Challenges'; // Import the Challenges component
-import Chat from './chat'; // Import the Chat component
-import Login from './Login'; // Import the Login component
-import Register from './Register'; // Import the Register component
-import logo from './figma/logo.png'; // Import the logo image
+import Challenges from './Challenges';
+import Chat from './chat';
+import Login from './Login';
+import Register from './Register';
+import logo from './figma/logo.png';
 
-// Define the marker icon for the map
 const markerIcon = new L.Icon({
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
   iconSize: [30, 45],
@@ -22,8 +21,8 @@ const markerIcon = new L.Icon({
 
 const tileLayerUrl = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
 
-// List of second-hand stores
 const secondHandStores = [
+  // [Previous store list unchanged]
   { id: 1, name: "Second Hand Sofia", city: "Sofia", position: [42.6977, 23.3242] },
   { id: 2, name: "Thrift Store Plovdiv", city: "Plovdiv", position: [42.1354, 24.7453] },
   { id: 3, name: "Vintage Varna", city: "Varna", position: [43.2141, 27.9147] },
@@ -65,7 +64,6 @@ const generateStreetViewUrl = (lat, lng) => {
   return `https://www.google.com/maps/embed/v1/streetview?key=YOUR_GOOGLE_MAPS_API_KEY&location=${lat},${lng}&heading=210&pitch=10&fov=35`;
 };
 
-// BulgariaMap Component
 const BulgariaMap = () => {
   const [search, setSearch] = useState("");
   const [filterCity, setFilterCity] = useState("");
@@ -103,7 +101,7 @@ const BulgariaMap = () => {
       </div>
 
       <MapContainer
-        center={[42.7339, 25.4858]} // Adjusted to center on Bulgaria
+        center={[42.7339, 25.4858]}
         zoom={7}
         style={{ height: "400px", width: "100%", border: "1px solid #ccc", borderRadius: "8px" }}
         scrollWheelZoom={true}
@@ -151,8 +149,8 @@ const App = () => {
             <Link to="/challenges" style={styles.navLink}>CHALLENGES</Link>
           </div>
           <div style={styles.authButtons}>
-            <Link to="/login" style={styles.authButton}>Login</Link>
-            <Link to="/register" style={styles.authButton}>Register</Link>
+            <Link to="/login" style={{...styles.authButton, color: '#6E7A7A'}}>Login</Link>
+            <Link to="/register" style={{...styles.authButton, color: '#6E7A7A'}}>Register</Link>
           </div>
         </div>
       )}
@@ -161,7 +159,7 @@ const App = () => {
         <Route path="/" element={
           <>
             <div style={styles.tagline}>
-              Secondhand, First Choice - Look Good, Feel Good, Do Good.
+              <p>Secondhand, First Choice — Look Good, Feel Good, Do Good.</p>
             </div>
             <div style={styles.videoSection}>
               <ReactPlayer
@@ -219,7 +217,6 @@ const App = () => {
   );
 };
 
-// Inline CSS styles
 const styles = {
   container: {
     fontFamily: 'Arial, sans-serif',
@@ -234,7 +231,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#e6f0fa',
+    backgroundColor: '#CFE1E5',
     padding: '10px 20px',
     borderBottom: '2px solid #ccc',
   },
@@ -249,13 +246,13 @@ const styles = {
     flex: '2',
     display: 'flex',
     justifyContent: 'center',
-    gap: '40px', // Increased gap for more space between links
+    gap: '70px',
   },
   navLink: {
     textDecoration: 'none',
-    color: '#333',
+    color: '#649D9D',
     fontWeight: 'bold',
-    fontSize: '16px',
+    fontSize: '20px',
   },
   authButtons: {
     flex: '1',
@@ -265,7 +262,7 @@ const styles = {
   },
   authButton: {
     textDecoration: 'none',
-    color: '#333',
+    color: '#333', // This is overridden in the Link components above
     fontWeight: 'bold',
     fontSize: '16px',
     padding: '5px 10px',
@@ -274,22 +271,18 @@ const styles = {
     backgroundColor: '#e6f0fa',
   },
   tagline: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    margin: '40px 0',
-    color: '#555',
+    fontSize: '16px',
+    margin: '31px 0',
+    color: '#6E7A7A',
   },
   videoSection: {
     margin: '40px 0',
   },
-  materialsSection: {
-    margin: '40px 0',
-  },
   sectionTitle: {
-    fontSize: '20px',
+    fontSize: '18px',
     fontWeight: 'normal',
     marginBottom: '30px',
-    color: '#555',
+    color: '#6E7A7A',
   },
   materialsContainer: {
     display: 'flex',
@@ -298,26 +291,26 @@ const styles = {
     flexWrap: 'wrap',
   },
   materialCard: {
-    backgroundColor: '#b3d4d4',
+    backgroundColor: '#649D9D',
     padding: '20px',
     width: '200px',
     borderRadius: '8px',
-    textAlign: 'left',
+    textAlign: 'center',
   },
   materialTitle: {
     fontSize: '18px',
     fontWeight: 'bold',
     marginBottom: '10px',
-    color: '#333',
+    color: '#CFE1E5',
   },
   materialText: {
     fontSize: '14px',
-    color: '#333',
+    color: '#CFE1E5',
   },
   callToAction: {
     fontSize: '16px',
     margin: '40px 0',
-    color: '#555',
+    color: '#6E7A7A',
   },
 };
 

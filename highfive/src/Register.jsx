@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 const Container = styled.div`
-  position: relative; /* Added for logo positioning */
-  background: #CFE1E5; // Changed background color
+  position: relative;
+  background: #CFE1E5;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -30,17 +30,18 @@ const Card = styled.div`
 `;
 
 const Title = styled.h2`
-  color: #2d3436;
+  color: #6E7A7A; // Changed from #2d3436 to #6E7A7A
   margin-bottom: 20px;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 10px;
+  padding: 12px; // Increased from 10px for consistency
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
+  box-sizing: border-box; // Added for consistent sizing
   &:focus {
     border-color: #74b9ff;
     outline: none;
@@ -49,7 +50,7 @@ const Input = styled.input`
 
 const Button = styled.button`
   width: 100%;
-  padding: 10px;
+  padding: 12px; // Increased from 10px to match inputs
   background-color: #649D9D;
   color: white;
   border: none;
@@ -57,6 +58,7 @@ const Button = styled.button`
   font-size: 1rem;
   cursor: pointer;
   margin-top: 10px;
+  box-sizing: border-box; // Added for consistent sizing
   &:hover {
     background-color: #5A8C8C;
   }
