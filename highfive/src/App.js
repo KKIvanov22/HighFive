@@ -79,7 +79,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  width: 100%;
+  width: 100%;a
   padding: 10px;
   background-color: #679090;
   color: white;
