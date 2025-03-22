@@ -8,6 +8,7 @@ import "./App.css"; // Ensure App.css is imported for map styles
 import { Routes, Route, Link } from 'react-router-dom';
 import Challenges from './Challenges'; // Import the Challenges component
 import Chat from './chat'; // Import the Chat component
+import logo from './figma/logo.png'; // Import the logo image
 
 // Define the marker icon for the map
 const markerIcon = new L.Icon({
@@ -137,8 +138,7 @@ const App = () => {
       {/* Navigation Bar */}
       <div style={styles.navBar}>
         <div style={styles.logo}>
-          {/* Placeholder for the logo - you can replace this with an actual image */}
-          <div style={styles.logoPlaceholder}>🌍</div>
+          <img src={logo} alt="Logo" style={styles.logoImage} />
         </div>
         <div style={styles.navLinks}>
           <Link to="/" style={styles.navLink}>HOME</Link>
@@ -243,8 +243,9 @@ const styles = {
   logo: {
     flex: '1',
   },
-  logoPlaceholder: {
-    fontSize: '24px',
+  logoImage: {
+    width: '60px', // Increased width
+    height: '60px', // Increased height
   },
   navLinks: {
     flex: '2',
