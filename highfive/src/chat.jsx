@@ -1,22 +1,84 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import Chart from 'chart.js/auto';  // Add this import
 
 const ChatScreen = () => {
   const [message, setMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
+  const [showWaterChart, setShowWaterChart] = useState(false);
+  const chartRef = useRef(null);
 
-  // Create image preview when a file is selected
   useEffect(() => {
     if (selectedImage) {
       const objectUrl = URL.createObjectURL(selectedImage);
       setImagePreview(objectUrl);
       
-      // Free memory when this component unmounts
       return () => URL.revokeObjectURL(objectUrl);
     }
   }, [selectedImage]);
+
+  useEffect(() => {
+    if (showWaterChart && chartRef.current) {
+      const ctx = chartRef.current.getContext('2d');
+      
+      // Clear any existing chart
+      if (window.waterConsumptionChart) {
+        window.waterConsumptionChart.destroy();
+      }
+      
+      // Data for each brand
+      const brands = ['Adidas', 'Forever 21', 'Nike', 'Louis Vuitton', 'H&M', 'Zara'];
+      const waterConsumption = [4276, 4111, 4998, 2700, 2700, 2700]; // in litres
+
+      // Create the chart
+      window.waterConsumptionChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: brands,
+          datasets: [{
+            label: 'Water Consumption (litres)',
+            data: waterConsumption,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Litres of Water'
+              }
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: 'Water Consumption per Cotton T-Shirt by Brand'
+            }
+          }
+        }
+      });
+    }
+  }, [showWaterChart]);
 
   const handleSendMessage = async () => {
     if (message.trim() && selectedImage) {
@@ -58,6 +120,7 @@ const ChatScreen = () => {
           
           setMessage('');
           setSelectedImage(null);
+          setShowWaterChart(true); // Show the chart after successful response
         } else {
           const errorMessage = {
             text: `Error: ${result.error}`,
@@ -65,6 +128,7 @@ const ChatScreen = () => {
             id: Date.now() + 2
           };
           setChatMessages(prevMessages => [...prevMessages, errorMessage]);
+          setShowWaterChart(false);
         }
       } catch (error) {
         console.error('Error processing request:', error);
@@ -225,7 +289,15 @@ const ChatScreen = () => {
       marginTop: '10px',
       color: '#5aa9a9',
       fontWeight: 'bold'
-    }
+    },
+    chartContainer: {
+      backgroundColor: 'white',
+      padding: '15px',
+      borderRadius: '8px',
+      marginTop: '20px',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      width: '100%'
+    },
   };
 
   return (
@@ -245,9 +317,16 @@ const ChatScreen = () => {
                   {msg.text}
                 </div>
               ))}
+              
+              {showWaterChart && (
+                <div style={styles.chartContainer}>
+                  <h3>Water Consumption for Cotton T-Shirts by Brand</h3>
+                  <canvas ref={chartRef} width="400" height="200"></canvas>
+                </div>
+              )}
             </div>
           </div>
-
+          
           <div style={styles.sideSection}>
             <div style={styles.uploadBox}>
               <div style={styles.uploadArea}>
