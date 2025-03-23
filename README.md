@@ -2,8 +2,6 @@
 <h1 align="center"> 🙏🏻High Five 🙏🏻 </h1>
 <img align="right" src="./highfive/src/figma/logo.png">
 
- 
-
 <br>
 <p>Hello, we are High Five!</p>
 <p>At HighFive, our purpose is to empower individuals to make environmentally conscious fashion choices with ease and confidence. We are dedicated to building an app that educates users on the environmental impact of clothing production, specifically focusing on the water footprint of various materials. By promoting the use of second-hand clothing and sustainable fashion alternatives, we aim to reduce the ecological footprint of the fashion industry. Through insightful data, comparisons, and tips for greener shopping habits, we guide our users toward a more sustainable wardrobe and a healthier planet.</p>
@@ -33,7 +31,7 @@
 <h2 align="left">📄📎 Documents</h2><br>
   <ul>
     <li><a href="https://codingburgas-my.sharepoint.com/:p:/g/personal/zvyankova22_codingburgas_bg/EZqYdkRO07NFjPvcuTjo1I4B92fdZ2lkoUvLkiV39Iv__Q?e=hyJf0d">Presentation</a></li>
-    <li><a href="https://codingburgas-my.sharepoint.com/:p:/g/personal/zvyankova22_codingburgas_bg/EZqYdkRO07NFjPvcuTjo1I4B92fdZ2lkoUvLkiV39Iv__Q?e=hyJf0d">Video</a></li>
+    <li><a href="https://codingburgas-my.sharepoint.com/:v:/g/personal/kkivanov22_codingburgas_bg/EUnermU4XsNMjcceJyDkQXYBdjF9Gshe3GRrM3HojUOTsA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Pe6kXI">Video</a></li>
   </ul>  
 
 <h2 align="left">👨🏻‍💻 Team Members </h2>
