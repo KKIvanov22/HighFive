@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import ReactPlayer from 'react-player';
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -22,7 +23,6 @@ const markerIcon = new L.Icon({
 const tileLayerUrl = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png";
 
 const secondHandStores = [
-  // [Previous store list unchanged]
   { id: 1, name: "Second Hand Sofia", city: "Sofia", position: [42.6977, 23.3242] },
   { id: 2, name: "Thrift Store Plovdiv", city: "Plovdiv", position: [42.1354, 24.7453] },
   { id: 3, name: "Vintage Varna", city: "Varna", position: [43.2141, 27.9147] },
@@ -137,31 +137,31 @@ const App = () => {
   const hideNavBar = location.pathname === '/login' || location.pathname === '/register';
 
   return (
-    <div style={styles.container}>
+    <div className="App">
       {!hideNavBar && (
-        <div style={styles.navBar}>
-          <div style={styles.logo}>
-            <img src={logo} alt="Logo" style={styles.logoImage} />
+        <nav className="navbar">
+          <div className="logo">
+            <img src={logo} alt="Logo" className="logo-image" />
           </div>
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>HOME</Link>
-            <Link to="/chat" style={styles.navLink}>CHAT</Link>
-            <Link to="/challenges" style={styles.navLink}>CHALLENGES</Link>
+          <div className="nav-links">
+            <Link to="/" className="nav-link">HOME</Link>
+            <Link to="/chat" className="nav-link">CHAT</Link>
+            <Link to="/challenges" className="nav-link">CHALLENGES</Link>
           </div>
-          <div style={styles.authButtons}>
-            <Link to="/login" style={{...styles.authButton, color: '#6E7A7A'}}>Login</Link>
-            <Link to="/register" style={{...styles.authButton, color: '#6E7A7A'}}>Register</Link>
+          <div className="auth-buttons">
+            <Link to="/login" className="auth-button">Login</Link>
+            <Link to="/register" className="auth-button">Register</Link>
           </div>
-        </div>
+        </nav>
       )}
 
       <Routes>
         <Route path="/" element={
           <>
-            <div style={styles.tagline}>
+            <div className="tagline">
               <p>Secondhand, First Choice — Look Good, Feel Good, Do Good.</p>
             </div>
-            <div style={styles.videoSection}>
+            <div className="video-section">
               <ReactPlayer
                 url={video}
                 playing={true}
@@ -169,40 +169,35 @@ const App = () => {
                 muted={true}
                 width="60%"
                 height="auto"
-                style={{
-                  maxWidth: '600px',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                  margin: '0 auto',
-                }}
+                className="react-player"
               />
             </div>
-            <div style={styles.materialsSection}>
-              <h2 style={styles.sectionTitle}>
+            <div className="materials-section">
+              <h2 className="section-title">
                 Here are some of the most damaging materials in terms of water pollution and consumption:
               </h2>
-              <div style={styles.materialsContainer}>
-                <div style={styles.materialCard}>
-                  <h3 style={styles.materialTitle}>Cotton:</h3>
-                  <p style={styles.materialText}>
+              <div className="materials-container">
+                <div className="material-card">
+                  <h3 className="material-title">Cotton:</h3>
+                  <p className="material-text">
                     2,700 liters of water for one t-shirt, plus heavy pesticide use.
                   </p>
                 </div>
-                <div style={styles.materialCard}>
-                  <h3 style={styles.materialTitle}>Polyester & Nylon:</h3>
-                  <p style={styles.materialText}>
+                <div className="material-card">
+                  <h3 className="material-title">Polyester & Nylon:</h3>
+                  <p className="material-text">
                     Shed microplastics into oceans during washing.
                   </p>
                 </div>
-                <div style={styles.materialCard}>
-                  <h3 style={styles.materialTitle}>Viscose/Rayon:</h3>
-                  <p style={styles.materialText}>
+                <div className="material-card">
+                  <h3 className="material-title">Viscose/Rayon:</h3>
+                  <p className="material-text">
                     Requires toxic chemicals that pollute water.
                   </p>
                 </div>
               </div>
             </div>
-            <div style={styles.callToAction}>
+            <div className="call-to-action">
               By shopping secondhand, you reduce water waste and environmental harm. Start making a difference! Find the nearest secondhand shop below:
             </div>
             <BulgariaMap />
@@ -215,103 +210,6 @@ const App = () => {
       </Routes>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    fontFamily: 'Arial, sans-serif',
-    textAlign: 'center',
-    color: '#333',
-    padding: '0',
-    margin: '0',
-    minHeight: '100vh',
-    backgroundColor: '#fff',
-  },
-  navBar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#CFE1E5',
-    padding: '10px 20px',
-    borderBottom: '2px solid #ccc',
-  },
-  logo: {
-    flex: '1',
-  },
-  logoImage: {
-    width: '100px',
-    height: '80px',
-  },
-  navLinks: {
-    flex: '2',
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '70px',
-  },
-  navLink: {
-    textDecoration: 'none',
-    color: '#649D9D',
-    fontWeight: 'bold',
-    fontSize: '20px',
-  },
-  authButtons: {
-    flex: '1',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    gap: '10px',
-  },
-  authButton: {
-    textDecoration: 'none',
-    color: '#333', // This is overridden in the Link components above
-    fontWeight: 'bold',
-    fontSize: '16px',
-    padding: '5px 10px',
-    border: '1px solid #333',
-    borderRadius: '4px',
-    backgroundColor: '#e6f0fa',
-  },
-  tagline: {
-    fontSize: '16px',
-    margin: '31px 0',
-    color: '#6E7A7A',
-  },
-  videoSection: {
-    margin: '40px 0',
-  },
-  sectionTitle: {
-    fontSize: '18px',
-    fontWeight: 'normal',
-    marginBottom: '30px',
-    color: '#6E7A7A',
-  },
-  materialsContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '20px',
-    flexWrap: 'wrap',
-  },
-  materialCard: {
-    backgroundColor: '#649D9D',
-    padding: '20px',
-    width: '200px',
-    borderRadius: '8px',
-    textAlign: 'center',
-  },
-  materialTitle: {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    marginBottom: '10px',
-    color: '#CFE1E5',
-  },
-  materialText: {
-    fontSize: '14px',
-    color: '#CFE1E5',
-  },
-  callToAction: {
-    fontSize: '16px',
-    margin: '40px 0',
-    color: '#6E7A7A',
-  },
 };
 
 export default App;

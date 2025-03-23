@@ -1,60 +1,149 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+  font-family: 'Arial, sans-serif';
+  color: #333;
+  padding: 0;
+  margin: 0;
   min-height: 100vh;
+  background-color: #fff;
+}
+
+/* Navbar styling */
+.navbar {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: #CFE1E5;
+  padding: 10px 20px;
+  border-bottom: 2px solid #ccc;
 }
 
-.App-link {
-  color: #61dafb;
+.logo {
+  flex: 1;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.logo-image {
+  width: 100px;
+  height: 80px;
 }
 
-.background-container {
-  background-image: url('figma/login.png'); /* Replace with your image path */
-  background-size: cover;
-  background-position: center;
-  height: 100vh; /* Full viewport height */
+.nav-links {
+  flex: 2;
   display: flex;
   justify-content: center;
-  align-items: center;
+  gap: 70px;
 }
 
-.ui-overlay {
-  background-color: rgba(255, 255, 255, 0.8); /* White with transparency */
+.nav-link {
+  text-decoration: none;
+  color: #649D9D;
+  font-family: 'Arial, sans-serif'; /* Explicitly set to original font */
+  font-weight: bold;
+  font-size: 22px;
+  position: relative; /* For underline effect */
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+/* Hover effects inspired by style.css */
+.nav-link:hover {
+  color: #6E7A7A; /* Darker shade for hover */
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 1px;
+  background-color: #649D9D; /* Matches original color scheme */
+  transition: width 0.2s ease; /* Matches style.css transition */
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.auth-buttons {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.auth-button {
+  text-decoration: none;
+  color: #6E7A7A;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 5px 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #e6f0fa;
+}
+
+.tagline {
+  font-size: 16px;
+  margin: 31px 0;
+  color: #6E7A7A;
+}
+
+.video-section {
+  margin: 40px 0;
+}
+
+.react-player {
+  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+}
+
+.materials-section {
+  /* No additional styling needed beyond children */
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: normal;
+  margin-bottom: 30px;
+  color: #6E7A7A;
+}
+
+.materials-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.material-card {
+  background-color: #649D9D;
   padding: 20px;
-  border-radius: 10px;
+  width: 200px;
+  border-radius: 8px;
   text-align: center;
 }
 
+.material-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #CFE1E5;
+}
 
+.material-text {
+  font-size: 14px;
+  color: #CFE1E5;
+}
+
+.call-to-action {
+  font-size: 16px;
+  margin: 40px 0;
+  color: #6E7A7A;
+}
+
+/* Existing map and controls styling */
 .map-container {
   max-width: 100%;
   margin: 20px auto;
@@ -68,7 +157,7 @@
   margin-bottom: 15px;
 }
 
-.controls input {
+.search-bar {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -79,12 +168,12 @@
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.controls input:focus {
+.search-bar:focus {
   border-color: #007bff;
   box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
 }
 
-.controls select {
+.city-select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -94,7 +183,7 @@
   transition: 0.3s;
 }
 
-.controls select:hover {
+.city-select:hover {
   border-color: #007bff;
 }
 
@@ -127,4 +216,17 @@
   height: 200px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
