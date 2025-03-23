@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const ChatScreen = () => {
   const [message, setMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
+
+  // Create image preview when a file is selected
+  useEffect(() => {
+    if (selectedImage) {
+      const objectUrl = URL.createObjectURL(selectedImage);
+      setImagePreview(objectUrl);
+      
+      // Free memory when this component unmounts
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  }, [selectedImage]);
 
   const handleSendMessage = async () => {
     if (message.trim() && selectedImage) {
@@ -77,6 +89,9 @@ const ChatScreen = () => {
   };
 
   const handleImageUpload = (e) => {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
     setSelectedImage(e.target.files[0]);
   };
 
@@ -236,24 +251,37 @@ const ChatScreen = () => {
           <div style={styles.sideSection}>
             <div style={styles.uploadBox}>
               <div style={styles.uploadArea}>
-                <svg 
-                  style={styles.cameraIcon}
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                >
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                  <circle cx="12" cy="13" r="4"></circle>
-                </svg>
+                {!imagePreview ? (
+                  <svg 
+                    style={styles.cameraIcon}
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                  >
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
+                ) : (
+                  <img 
+                    src={imagePreview} 
+                    alt="Preview" 
+                    style={{
+                      maxWidth: '100%',
+                      maxHeight: '200px',
+                      marginBottom: '16px',
+                      borderRadius: '4px'
+                    }} 
+                  />
+                )}
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  style={{ marginBottom: '16px', marginLeft: '75px' }}
+                  style={{ marginBottom: '16px' }}
                 />
                 {selectedImage && (
                   <div style={styles.imageSelected}>
