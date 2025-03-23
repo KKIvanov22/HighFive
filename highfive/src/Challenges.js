@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import video from './1.mp4';
 import logo from './figma/logo.png';
 
 function Challenges() {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    if (selectedImage) {
+      const objectUrl = URL.createObjectURL(selectedImage);
+      setImagePreview(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  }, [selectedImage]);
+
+  const handleImageUpload = (e) => {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setSelectedImage(e.target.files[0]);
+  };
+
   const styles = {
     challenges: {},
     header: {
@@ -78,7 +96,7 @@ function Challenges() {
       flex: 1,
       textAlign: 'center',
     },
-    challengeRow: {  // New style for the row containing Challenge and Show us your outfit
+    challengeRow: {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -116,6 +134,12 @@ function Challenges() {
       color: '#6E7A7A',
       textAlign: 'center',
     },
+    uploadContainer: {
+      position: 'relative',
+      width: '100px',
+      height: '100px',
+      margin: '0 auto',
+    },
     plusIcon: {
       width: '100px',
       height: '100px',
@@ -125,7 +149,29 @@ function Challenges() {
       alignItems: 'center',
       fontSize: '70px',
       color: '#6E7A7A',
-      margin: '0 auto',
+      borderRadius: '8px',
+      position: 'relative',
+      zIndex: 2,
+    },
+    imagePreview: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100px',
+      height: '100px',
+      objectFit: 'cover',
+      borderRadius: '8px',
+      zIndex: 1,
+    },
+    fileInput: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100px',
+      height: '100px',
+      opacity: 0,
+      cursor: 'pointer',
+      zIndex: 3,
     },
     footerQuestion: {
       fontSize: '26px',
@@ -145,7 +191,6 @@ function Challenges() {
       <main style={styles.mainContent}>
         <h1 style={styles.mainHeading}>Challenge yourself NOW!</h1>
         <div style={styles.contentWrapper}>
-          {/* Left Column */}
           <div style={styles.leftColumn}>
             <div style={styles.textBox}>
               <h2 style={styles.textBoxHeading}>The $10 Thrift Store Challenge: Can You Do It?</h2>
@@ -155,7 +200,6 @@ function Challenges() {
             </div>
           </div>
 
-          {/* Right Column */}
           <div style={styles.rightColumn}>
             <div style={styles.textBox}>
               <h2 style={styles.textBoxHeading}>Why?</h2>
@@ -166,7 +210,6 @@ function Challenges() {
           </div>
         </div>
 
-        {/* New Row for Challenge and Show us your outfit */}
         <div style={styles.challengeRow}>
           <div style={{ ...styles.textBox, flex: 1 }}>
             <h2 style={styles.textBoxHeading}>The Challenge:</h2>
@@ -178,7 +221,18 @@ function Challenges() {
           </div>
           <div style={{ ...styles.textBox, flex: 1 }}>
             <h2 style={styles.textBoxHeading}>Show us your outfit:</h2>
-            <div style={styles.plusIcon}>+</div>
+            <div style={styles.uploadContainer}>
+              {imagePreview && (
+                <img src={imagePreview} alt="Preview" style={styles.imagePreview} />
+              )}
+              <div style={styles.plusIcon}>+</div>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={styles.fileInput}
+              />
+            </div>
           </div>
         </div>
 
