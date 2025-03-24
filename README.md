@@ -30,7 +30,7 @@
 
 <h2 align="left">📄📎 Documents</h2><br>
   <ul>
-    <li><a href="[https://codingburgas-my.sharepoint.com/:p:/g/personal/zvyankova22_codingburgas_bg/EZqYdkRO07NFjPvcuTjo1I4B92fdZ2lkoUvLkiV39Iv__Q?e=hyJf0d](https://codingburgas-my.sharepoint.com/:p:/g/personal/kkivanov22_codingburgas_bg/EX131FXBiRxBpaoSzhFMUYYBmQ0fK-jt3QaZi4VPTKzjbw?e=uQCDFX)">Presentation</a></li>
+    <li><a href="https://codingburgas-my.sharepoint.com/:p:/g/personal/kkivanov22_codingburgas_bg/EX131FXBiRxBpaoSzhFMUYYBmQ0fK-jt3QaZi4VPTKzjbw?e=uQCDFX">Presentation</a></li>
     <li><a href="https://codingburgas-my.sharepoint.com/:v:/g/personal/kkivanov22_codingburgas_bg/EUnermU4XsNMjcceJyDkQXYBdjF9Gshe3GRrM3HojUOTsA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Pe6kXI">Video</a></li>
   </ul>  
 
